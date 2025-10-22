@@ -7,9 +7,15 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Trainer : GymUser
+    internal class Trainers : GymUsers
     {
         //HireDate => CreatedAt
         public Specialist Specialist { get; set; }
+
+        #region RelationShips
+        #region Relation With Sessions
+        public ICollection<Sessions> Sessions { get; set; }
+        #endregion
+        #endregion
     }
 }

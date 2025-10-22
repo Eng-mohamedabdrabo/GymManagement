@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Member : GymUser
+    internal class Categories : BaseEntity
     {
-        //CreatedAt(in BaseEntity) => JoinDate (later)
+        public string CategoryName { get; set; }
 
-        public string? Photo { get; set; }
+        public ICollection<Sessions> Sessions { get; set; }
     }
 }

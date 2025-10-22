@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal abstract class GymUser : BaseEntity
+    internal abstract class GymUsers : BaseEntity
     {
         public string Name { get; set; }
         public string Email { get; set; }
