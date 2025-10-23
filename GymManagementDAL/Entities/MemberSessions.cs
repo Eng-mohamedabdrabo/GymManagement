@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal class MemberSessions : BaseEntity
+    public class MemberSessions : BaseEntity
     {
         public bool IsAttended { get; set; }
 

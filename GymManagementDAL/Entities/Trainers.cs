@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Entities
 {
-    internal class Trainers : GymUsers
+    public class Trainers : GymUsers
     {
         //HireDate => CreatedAt
         public Specialist Specialist { get; set; }
