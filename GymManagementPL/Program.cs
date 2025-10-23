@@ -1,4 +1,6 @@
 using GymManagementDAL.Data.Contexts;
+using GymManagementDAL.Reposetories.implementation;
+using GymManagementDAL.Reposetories.interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 
@@ -19,6 +21,8 @@ namespace GymManagementPL
                 //options.UseSqlServer(builder.Configuration.["ConnectionString:DefaultConnection"];               // Second Way \\
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));        //3rd way and most common used  \\
             });
+
+            builder.Services.AddScoped(typeof(IGenericRepositoryInterface<>), typeof(GenericRepository<>));
 
             var app = builder.Build();
 

@@ -13,11 +13,8 @@ namespace GymManagementDAL.Reposetories.interfaces
         IEnumerable<Plans> GetAllPlans();
         //GETBYID
         Plans GetPlan(int id);
-        //ADD
-        int AddPlan(Plans Plan);
         //UPDATE
         int UpdatePlan(Plans Plan);
-        //DELETE
-        int DeletePlan(int id);
+       
     }
 }
