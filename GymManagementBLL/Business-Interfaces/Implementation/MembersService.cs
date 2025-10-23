@@ -18,6 +18,8 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
         {
             _genericRepository = genericRepository;
         }
+
+
         public IEnumerable<MembersViewModel> GetAllMembers()
         {
             var members = _genericRepository.GetAll();
@@ -59,5 +61,38 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
             return membersViewModel;
             #endregion
         }
+
+        public bool CreateMember(CreateMemberViewModel createMember)
+        {
+            var ExistedEmail = _genericRepository.GetAll(X => X.Email == createMember.Email).Any();
+            var ExistedPhone = _genericRepository.GetAll(X => X.Phone == createMember.Phone).Any();
+
+            if (ExistedEmail || ExistedPhone)
+                return false;
+
+            var member = new Members
+            {
+                Email = createMember.Email,
+                Phone = createMember.Phone,
+                Name = createMember.Name,
+                DateOfBirth = createMember.DateOfBirth,
+                Gender = createMember.Gender,
+                Address = new Address
+                {
+                    BuildingNumber = createMember.BuildingNumber,
+                    City = createMember.City,
+                    Street = createMember.Street,
+                },
+                HealthRecords = new HealthRecords
+                {
+                    Height = createMember.HealthRecord.Height,
+                    Weight = createMember.HealthRecord.Weight,
+                    BloodType = createMember.HealthRecord.BloodType,
+                }
+            };
+
+            return _genericRepository.Add(member) > 0;
+        }
+
     }
 }

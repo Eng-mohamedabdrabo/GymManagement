@@ -38,5 +38,9 @@ namespace GymManagementBLL.View_Models
 
         [Required(ErrorMessage ="Health Record is Required")]
         public HealthRecordViewModel HealthRecord { get; set; }
+
+        [Required(ErrorMessage = "Date of Birth is required")]
+        [DataType(DataType.Date, ErrorMessage = "Invalid date format")]
+        public DateOnly DateOfBirth { get; set; }
     }
 }
