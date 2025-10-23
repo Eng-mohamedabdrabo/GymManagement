@@ -4,11 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GymManagementDAL.Entities.Enums
+namespace GymManagementDAL.Reposetories.interfaces
 {
-    public enum Gender
+    internal interface IGenericRepositoryInterface
     {
-        Male = 1,
-        Female,
     }
 }
