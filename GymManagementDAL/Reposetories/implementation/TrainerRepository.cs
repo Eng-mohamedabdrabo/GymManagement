@@ -1,6 +1,7 @@
 ﻿using GymManagementDAL.Data.Contexts;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Reposetories.interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,10 @@ namespace GymManagementDAL.Reposetories.implementation
     internal class TrainerRepository : ITrainerRepository
     {
         private readonly GymDbContexts _dbContext;
-
+        public TrainerRepository(GymDbContexts dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public int AddTrainer(Trainers trainer)
         {
             _dbContext.Trainers.Add(trainer);

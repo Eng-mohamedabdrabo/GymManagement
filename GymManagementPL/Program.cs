@@ -15,7 +15,9 @@ namespace GymManagementPL
 
             builder.Services.AddDbContext<GymDbContexts>(options =>
             {
-                options.UseSqlServer("Server=.;Database=GymDatabase;Trusted_Connection=True;TrustServerCertificate=True;");
+                //options.UseSqlServer(builder.Configuration.GetSection("ConnectionString")["DefaultConnection"];   //First Way \\
+                //options.UseSqlServer(builder.Configuration.["ConnectionString:DefaultConnection"];               // Second Way \\
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));        //3rd way and most common used  \\
             });
 
             var app = builder.Build();
