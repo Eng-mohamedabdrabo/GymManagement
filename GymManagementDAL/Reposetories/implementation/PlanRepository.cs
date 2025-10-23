@@ -13,7 +13,10 @@ namespace GymManagementDAL.Reposetories.implementation
     internal class PlanRepository : IPlansInterface
     {
         private readonly GymDbContexts _dbContext;
-       
+        public PlanRepository(GymDbContexts dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public IEnumerable<Plans> GetAllPlans() => _dbContext.Plans.ToList();
        
 
