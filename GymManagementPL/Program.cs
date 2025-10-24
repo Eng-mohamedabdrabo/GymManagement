@@ -23,6 +23,8 @@ namespace GymManagementPL
             });
 
             builder.Services.AddScoped(typeof(IGenericRepositoryInterface<>), typeof(GenericRepository<>));
+            builder.Services.AddScoped(typeof(IPlansInterface), typeof(PlanRepository));
+
 
             var app = builder.Build();
 

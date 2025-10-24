@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Reposetories.implementation
 {
-    internal class PlanRepository : IPlansInterface
+    public class PlanRepository : IPlansInterface
     {
         private readonly GymDbContexts _dbContext;
         public PlanRepository(GymDbContexts dbContext)

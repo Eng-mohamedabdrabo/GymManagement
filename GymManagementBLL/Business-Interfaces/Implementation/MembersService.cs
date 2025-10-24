@@ -15,9 +15,24 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
     public class MembersService : IMemberService
     {
         private readonly IGenericRepositoryInterface<Members> _genericRepository;
-        public MembersService(IGenericRepositoryInterface<Members> genericRepository)
+        private readonly IPlansInterface _planRepository;
+        private readonly IGenericRepositoryInterface<Memberships> _memberShipRepository;
+        private readonly IGenericRepositoryInterface<MemberSessions> _memberSessionRepository;
+        private readonly IGenericRepositoryInterface<Sessions> _SessionRepository;
+
+        public MembersService(
+            IGenericRepositoryInterface<Members> genericRepository,
+            IPlansInterface plansRepository,
+            IGenericRepositoryInterface<Memberships> memberShipRepository,
+            IGenericRepositoryInterface<MemberSessions> memberSessionRepository,
+            IGenericRepositoryInterface<Sessions> sessionRepository
+            )
         {
             _genericRepository = genericRepository;
+            _planRepository = plansRepository;
+            _memberShipRepository = memberShipRepository;
+            _memberSessionRepository = memberSessionRepository;
+            _SessionRepository = sessionRepository;
         }
 
         public IEnumerable<MembersViewModel> GetAllMembers()
@@ -116,7 +131,7 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
 
         public bool UpdateMember(int memberId, MemberToUpdateViewModel memberToUpdate)
         {
-           
+
 
             if (IsEmailExist(memberToUpdate.Email) || IsPhoneExist(memberToUpdate.Phone))
                 return false;
@@ -131,14 +146,56 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
             member.Address.City = memberToUpdate.City;
             member.Address.Street = memberToUpdate.Street;
             member.UpdatedAt = DateTime.Now;
-            
-            return _genericRepository.Update(member) >0;
+
+            return _genericRepository.Update(member) > 0;
+        }
+
+        public bool DeleteMember(int memberId)
+        {
+            try
+            {
+                var member = _genericRepository.GetById(memberId);
+                if (member is null) return false;
+                var MemberSessionIds = _memberSessionRepository
+                    .GetAll(X => X.MembersId == memberId)
+                    .Select(X => X.SessionsId);
+
+                var hasFutureSession = _SessionRepository
+                    .GetAll(X => MemberSessionIds.Contains(X.Id) && X.StartDate > DateTime.Now).Any();
+
+                if (hasFutureSession)
+                    return false;
+
+                var memberShips =
+                    _memberShipRepository
+                    .GetAll(X => X.MembersId == memberId);
+
+                if (memberShips.Any())
+                {
+                    foreach (var memberShip in memberShips)
+                    {
+                        _memberShipRepository.Delete(memberShip);
+                    }
+                }
+
+                return _genericRepository.Delete(member) > 0;
+
+            }
+            catch (Exception)
+            {
+
+                return false;
+            }
+
+
         }
 
         #region Helper Methods
         private bool IsEmailExist(string email) => _genericRepository.GetAll(X => X.Email == email).Any();
 
         private bool IsPhoneExist(string phone) => _genericRepository.GetAll(X => X.Phone == phone).Any();
+
+
         #endregion
     }
 }
