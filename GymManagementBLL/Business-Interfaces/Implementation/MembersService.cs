@@ -106,7 +106,7 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
                 }
             };
 
-            return _genericRepository.Add(member) > 0;
+            return /*_genericRepository.Add(member) > 0*/ true;
         }
 
         public MemberToUpdateViewModel? GetMemberToUpdate(int memberId)
@@ -147,7 +147,7 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
             member.Address.Street = memberToUpdate.Street;
             member.UpdatedAt = DateTime.Now;
 
-            return _genericRepository.Update(member) > 0;
+            return /*_genericRepository.Update(member) > 0*/ true;
         }
 
         public bool DeleteMember(int memberId)
@@ -178,7 +178,7 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
                     }
                 }
 
-                return _genericRepository.Delete(member) > 0;
+                return /*_genericRepository.Delete(member) >*/ true;
 
             }
             catch (Exception)

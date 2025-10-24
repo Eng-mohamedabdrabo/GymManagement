@@ -14,7 +14,7 @@ namespace GymManagementDAL.Reposetories.interfaces
         //GETBYID
         Plans GetPlan(int id);
         //UPDATE
-        int UpdatePlan(Plans Plan);
+        void UpdatePlan(Plans Plan);
        
     }
 }
