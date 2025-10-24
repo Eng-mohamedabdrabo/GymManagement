@@ -10,12 +10,16 @@ namespace GymManagementDAL.Entities
     {
         public DateTime EndDate { get; set; }
 
-        public string Status { get {
-                if (EndDate >= DateTime.Now)
+        public string Status
+        {
+            get
+            {
+                if (EndDate <= DateTime.Now)
                     return "Expired";
                 else
                     return "Active";
-            } }
+            }
+        }
 
         #region Relations
         #region Relation With Member 1 : M
@@ -26,7 +30,7 @@ namespace GymManagementDAL.Entities
         #region Relation With Plans 1:M
         public int PlansId { get; set; }
 
-        public Plans Plans { get; set; }  
+        public Plans Plans { get; set; }
         #endregion
         #endregion
     }

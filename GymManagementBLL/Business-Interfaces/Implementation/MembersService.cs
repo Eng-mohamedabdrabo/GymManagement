@@ -1,5 +1,6 @@
 ﻿using GymManagementBLL.Business_Interfaces.Interfaces;
 using GymManagementBLL.View_Models;
+using GymManagementBLL.View_Models.Members_View_Models;
 using GymManagementDAL.Entities;
 using GymManagementDAL.Reposetories.implementation;
 using GymManagementDAL.Reposetories.interfaces;
@@ -18,7 +19,6 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
         {
             _genericRepository = genericRepository;
         }
-
 
         public IEnumerable<MembersViewModel> GetAllMembers()
         {
@@ -94,5 +94,51 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
             return _genericRepository.Add(member) > 0;
         }
 
+        public MemberToUpdateViewModel? GetMemberToUpdate(int memberId)
+        {
+            var member = _genericRepository.GetById(memberId);
+
+            if (member is null)
+                return null;
+
+            else
+                return new MemberToUpdateViewModel
+                {
+                    Name = member.Name,
+                    Photo = member.Photo,
+                    Email = member.Email,
+                    Phone = member.Phone,
+                    BuildingNumber = member.Address.BuildingNumber,
+                    City = member.Address.City,
+                    Street = member.Address.Street,
+                };
+        }
+
+        public bool UpdateMember(int memberId, MemberToUpdateViewModel memberToUpdate)
+        {
+           
+
+            if (IsEmailExist(memberToUpdate.Email) || IsPhoneExist(memberToUpdate.Phone))
+                return false;
+
+            var member = _genericRepository.GetById(memberId);
+
+            if (member is null) return false;
+
+            member.Email = memberToUpdate.Email;
+            member.Phone = memberToUpdate.Phone;
+            member.Address.BuildingNumber = memberToUpdate.BuildingNumber;
+            member.Address.City = memberToUpdate.City;
+            member.Address.Street = memberToUpdate.Street;
+            member.UpdatedAt = DateTime.Now;
+            
+            return _genericRepository.Update(member) >0;
+        }
+
+        #region Helper Methods
+        private bool IsEmailExist(string email) => _genericRepository.GetAll(X => X.Email == email).Any();
+
+        private bool IsPhoneExist(string phone) => _genericRepository.GetAll(X => X.Phone == phone).Any();
+        #endregion
     }
 }
