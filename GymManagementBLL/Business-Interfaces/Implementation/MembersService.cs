@@ -67,10 +67,9 @@ namespace GymManagementBLL.Business_Interfaces.Implementation
         public bool CreateMember(CreateMemberViewModel createMember)
         {
             var memberRepo = _unitOfWork.GetRepository<Members>();
-            var ExistedEmail = memberRepo.GetAll(X => X.Email == createMember.Email).Any();
-            var ExistedPhone = memberRepo.GetAll(X => X.Phone == createMember.Phone).Any();
+           
 
-            if (ExistedEmail || ExistedPhone)
+            if (IsEmailExist(createMember.Email) || IsPhoneExist(createMember.Phone))
                 return false;
 
             var member = new Members
