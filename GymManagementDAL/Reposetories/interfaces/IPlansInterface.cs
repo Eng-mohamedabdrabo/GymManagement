@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Reposetories.interfaces
 {
-    internal interface IPlansInterface
+    public interface IPlansInterface
     {
         //GETALL
         IEnumerable<Plans> GetAllPlans();
         //GETBYID
         Plans GetPlan(int id);
         //UPDATE
-        int UpdatePlan(Plans Plan);
+        void UpdatePlan(Plans Plan);
        
     }
 }

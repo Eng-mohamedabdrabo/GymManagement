@@ -18,16 +18,14 @@ namespace GymManagementDAL.Reposetories.implementation
         {
             _dbContexts = dbContext;
         }
-        public int Add(TEntity iEntity)
+        public void Add(TEntity iEntity)
         {
             _dbContexts.Set<TEntity>().Add(iEntity);
-            return _dbContexts.SaveChanges();
         }
 
-        public int Delete(TEntity iEntity)
+        public void Delete(TEntity iEntity)
         {
             _dbContexts.Set<TEntity>().Remove(iEntity);
-            return _dbContexts.SaveChanges();
         }
 
         public IEnumerable<TEntity> GetAll(Func<TEntity, bool>? condition = null)
@@ -41,10 +39,9 @@ namespace GymManagementDAL.Reposetories.implementation
         public TEntity GetById(int id) => _dbContexts.Set<TEntity>().Find(id);
       
 
-        public int Update(TEntity iEntity)
+        public void Update(TEntity iEntity)
         {
             _dbContexts.Set<TEntity>().Update(iEntity);
-            return _dbContexts.SaveChanges();
         }
     }
 }

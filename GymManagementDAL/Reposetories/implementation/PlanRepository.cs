@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace GymManagementDAL.Reposetories.implementation
 {
-    internal class PlanRepository : IPlansInterface
+    public class PlanRepository : IPlansInterface
     {
         private readonly GymDbContexts _dbContext;
         public PlanRepository(GymDbContexts dbContext)
@@ -23,10 +23,9 @@ namespace GymManagementDAL.Reposetories.implementation
         public Plans GetPlan(int id) => _dbContext.Plans.Find(id);
         
 
-        public int UpdatePlan(Plans Plan)
+        public void UpdatePlan(Plans Plan)
         {
             _dbContext.Plans.Update(Plan);
-            return _dbContext.SaveChanges();
         }
     }
 }

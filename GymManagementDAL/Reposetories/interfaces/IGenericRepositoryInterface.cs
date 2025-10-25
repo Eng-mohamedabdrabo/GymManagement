@@ -14,8 +14,8 @@ namespace GymManagementDAL.Reposetories.interfaces
 
         IEntity GetById(int id);
 
-        int Add(IEntity iEntity);
-        int Update(IEntity iEntity);
-        int Delete(IEntity iEntity);
+        void Add(IEntity iEntity);
+        void Update(IEntity iEntity);
+        void Delete(IEntity iEntity);
     }
 }
