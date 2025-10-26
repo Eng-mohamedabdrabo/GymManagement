@@ -1,9 +1,9 @@
 using GymManagementDAL.Data.Contexts;
 using GymManagementDAL.Reposetories.implementation;
 using GymManagementDAL.Reposetories.interfaces;
+using GymManagementDAL.SeedData;
 using GymManagementDAL.UnitOfWork;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace GymManagementPL
 {
@@ -13,42 +13,65 @@ namespace GymManagementPL
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            #region Services Configuration (Dependency Injection)
+
+            // Add MVC Controllers & Views
             builder.Services.AddControllersWithViews();
 
+            // Register DbContext with SQL Server
             builder.Services.AddDbContext<GymDbContexts>(options =>
             {
-                //options.UseSqlServer(builder.Configuration.GetSection("ConnectionString")["DefaultConnection"];   //First Way \\
-                //options.UseSqlServer(builder.Configuration.["ConnectionString:DefaultConnection"];               // Second Way \\
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));        //3rd way and most common used  \\
+                options.UseSqlServer(
+                    builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            //builder.Services.AddScoped(typeof(IGenericRepositoryInterface<>), typeof(GenericRepository<>));
-            //builder.Services.AddScoped(typeof(IPlansInterface), typeof(PlanRepository));
+            // Register UnitOfWork and Repositories
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+            // builder.Services.AddScoped(typeof(IGenericRepositoryInterface<>), typeof(GenericRepository<>));
+            // builder.Services.AddScoped<IPlansInterface, PlanRepository>();
 
-            builder.Services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
-
+            #endregion
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            #region Database Migration & Seeding
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var dbContext = scope.ServiceProvider.GetRequiredService<GymDbContexts>();
+
+                // Apply pending migrations automatically
+                var pendingMigrations = dbContext.Database.GetPendingMigrations();
+                if (pendingMigrations?.Any() ?? false)
+                {
+                    dbContext.Database.Migrate();
+                }
+
+                // Seed initial data (if not already seeded)
+                GymDbContextSeeding.SeedData(dbContext);
+            }
+
+            #endregion
+
+            #region HTTP Request Pipeline Configuration
+
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
             app.UseHttpsRedirection();
-            app.UseRouting();
+            app.UseStaticFiles();
 
+            app.UseRouting();
             app.UseAuthorization();
 
-            app.MapStaticAssets();
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            #endregion
 
             app.Run();
         }
